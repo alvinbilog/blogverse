@@ -13,7 +13,11 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      lineClamp: {
+        2: '2',
+      },
+    },
   },
   plugins: [],
 };

@@ -1,23 +1,19 @@
-import { draftMode } from "next/headers";
+import { groq } from 'next-sanity';
+import { client } from '../../../sanity/lib/client';
+import BlogLists from '../components/BlogLists';
+const query = groq`
+  *[_type=='post']{
+    ...,
+    author->,
+    categories[]->
+  }|order(_createdAt desc)
+`;
+export default async function HomePage() {
+  const posts = await client.fetch(query);
 
-import PreviewDocumentsCount from "components/PreviewDocumentsCount";
-import PreviewProvide
-import { getClient } from "lib/sanity.client";
-
-export default async function IndexPage() {
-  const preview = draftMode().isEnabled
-    ? { token: process.env.SANITY_API_READ_TOKEN }
-    : undefined;
-
-  const data = await client.fetch(query);
-
-  if (preview) {
-    return (
-      <PreviewProvider token={preview.token}>
-        <PreviewDocumentsCount data={data} />
-      </PreviewProvider>
-    );
-  }
-
-  return <DocumentsCount data={data} />;
+  return (
+    <div>
+      <BlogLists posts={posts} />
+    </div>
+  );
 }
