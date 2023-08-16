@@ -8,6 +8,17 @@ const query = groq`
     categories[]->
   }|order(_createdAt desc)
 `;
+export async function getStaticProps() {
+  const posts = await client.fetch(query);
+
+  return {
+    props: {
+      posts,
+    },
+    // Set the revalidate interval in seconds (e.g., 1 hour = 3600 seconds)
+    revalidate: 60, // Adjust this value according to your needs
+  };
+}
 export default async function HomePage() {
   const posts = await client.fetch(query);
 
