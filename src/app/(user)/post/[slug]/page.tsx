@@ -10,6 +10,9 @@ type Props = {
   params: { slug: string };
 };
 
+//revalidate this page every 30seconds
+export const revalidate = 30;
+
 export async function generateStaticParams() {
   const query = groq`*[_type=='post']
   {
