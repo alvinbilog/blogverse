@@ -3,10 +3,13 @@ import { client } from '../../../../../sanity/lib/client';
 import urlFor from '../../../../../sanity/lib/urlFor';
 import Image from 'next/image';
 import { Post } from '../../../../../typings';
+import { PortableText } from '@portabletext/react';
+import { RichTextComponents } from '../../../components/RichTextComponents';
 
 type Props = {
   params: { slug: string };
 };
+
 export async function generateStaticParams() {
   const query = groq`*[_type=='post']
   {
@@ -14,11 +17,13 @@ export async function generateStaticParams() {
   }`;
   const slugs: Post[] = await client.fetch(query);
   const slugRoutes = slugs.map((slug) => slug.slug.current);
+
   return slugRoutes.map((slug) => ({ slug: slug }));
 }
+
 async function Post({ params: { slug } }: Props) {
   const query = groq`
-  *[_type=='post' && slug.current ==$slug] [0] 
+  *[_type=='post' && slug.current ==$slug] [0]
   {
     ...,
     author->,
@@ -36,7 +41,6 @@ async function Post({ params: { slug } }: Props) {
               src={urlFor(post.mainImage).url()}
               alt={post.author.name}
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </div>
           <section className="p-5 bg-[#F7AB0A] w-full">
@@ -58,7 +62,6 @@ async function Post({ params: { slug } }: Props) {
                   alt={post.author.name}
                   height={40}
                   width={60}
-                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="w-64 ">
                   <h3 className="text-lg font-bold mt-3">{post.author.name}</h3>
@@ -82,6 +85,9 @@ async function Post({ params: { slug } }: Props) {
           </section>
         </div>
       </section>
+      <div className="mt-5">
+        <PortableText value={post.body} components={RichTextComponents} />
+      </div>
     </article>
   );
 }
