@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
 function Header() {
   return (
@@ -17,12 +17,12 @@ function Header() {
         <h1>BlogVerse</h1>
       </div>
       <div>
-        <Link
+        {/* <Link
           href="/"
           className="px-5 py-3 text-sm md:text-base bg-gray-900 text[#F7AB0A] flex items-center rounded-full text-center"
         >
           Sign up
-        </Link>
+        </Link> */}
       </div>
     </header>
   );
